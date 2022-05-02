@@ -6,6 +6,8 @@ import Link from "next/link";
 import palette from "../styles/palette";
 import useModal from "../hooks/useModal";
 import SignUpModal from "./auths/SignUpModal";
+import { useSelector } from "../store";
+import HambergerIcon from "../public/static/svg/header/hamburger.svg";
 
 const Container = styled.div`
   position: sticky;
@@ -14,7 +16,7 @@ const Container = styled.div`
   height: 80px;
   display: flex;
   justify-content: space-between;
-  align-item: center;
+  align-items: center;
   padding: 0 80px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
@@ -56,10 +58,32 @@ const Container = styled.div`
       }
     }
   }
+  .header-user-profile {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 6px 0 16px;
+    border: 0;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.18);
+    border-radius: 21px;
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+    .header-user-profile-image {
+      margin-left: 8px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+  }
 `;
 
 const Header: React.FC = () => {
-  const { openModalPotal, ModalPortal } = useModal();
+  const { openModalPotal, ModalPortal, closeModalPotal } = useModal();
+  const user = useSelector((state) => state.user);
   return (
     <Container>
       <Link href="/">
@@ -68,20 +92,32 @@ const Header: React.FC = () => {
           <AirbnbLogoTextIcon />
         </a>
       </Link>
-      <div className="header-auth-buttons">
-        <button
-          type="button"
-          className="header-sign-up-button"
-          onClick={openModalPotal}
-        >
-          회원가입
+      {!user.isLogged && (
+        <div className="header-auth-buttons">
+          <button
+            type="button"
+            className="header-sign-up-button"
+            onClick={openModalPotal}
+          >
+            회원가입
+          </button>
+          <button type="button" className="header-login-button">
+            로그인
+          </button>
+        </div>
+      )}
+      {user.isLogged && (
+        <button className="header-user-profile" type="button">
+          <HambergerIcon />
+          <img
+            src={user.profileImage}
+            className="header-user-profile-image"
+            alt=""
+          />
         </button>
-        <button type="button" className="header-login-button">
-          로그인
-        </button>
-      </div>
+      )}
       <ModalPortal>
-        <SignUpModal />
+        <SignUpModal closeModalPotal={closeModalPotal} />
       </ModalPortal>
     </Container>
   );

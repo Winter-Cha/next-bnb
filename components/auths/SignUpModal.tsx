@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import CloseXICon from "../../public/static/svg/modal/modal_colose_x_icon.svg";
 import MailIcon from "../../public/static/svg/input/mail.svg";
@@ -74,12 +74,22 @@ const Container = styled.form`
     padding-bottom: 16px;
     border-bottom: 1px solid ${palette.gray_eb};
   }
+
+  .sign-up-modal-set-login {
+    color: ${palette.dark_cyan};
+    margin-left: 8px;
+    cursor: pointer;
+  }
 `;
 
 //* 비밀번호 최소 자릿수
 const PASSWORD_MIN_LENGTH = 8;
 
-const SignUpModal: React.FC = () => {
+interface IProps {
+  closeModalPotal: () => void;
+}
+
+const SignUpModal: React.FC<IProps> = ({ closeModalPotal }) => {
   const [email, setEmail] = useState("");
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -184,7 +194,7 @@ const SignUpModal: React.FC = () => {
     return true;
   };
 
-  //* 화원가입 폼 보내기
+  //* 화원가입 폼 제출하기
   const onSubmitSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setValidateMode(true);
@@ -205,15 +215,20 @@ const SignUpModal: React.FC = () => {
         console.log(signUpBody);
         const { data } = await signupAPI(signUpBody);
         dispatch(userActions.setLoggedUser(data));
+        closeModalPotal();
       } catch (e) {
         console.log(e);
       }
     }
   };
 
+  useEffect(() => {
+    setValidateMode(false);
+  }, []);
+
   return (
     <Container onSubmit={onSubmitSignUp}>
-      <CloseXICon className="modal-close-x-icon" />
+      <CloseXICon className="modal-close-x-icon" onClick={closeModalPotal} />
       <div className="input-wrapper">
         <Input
           placeholder="이메일 주소"
@@ -325,6 +340,16 @@ const SignUpModal: React.FC = () => {
       <div className="sign-up-modal-submit-button-wrapper">
         <Button type="submit">가입하기</Button>
       </div>
+      <p>
+        이미 에어비앤비 계정이 있나요?
+        <span
+          className="sign-up-modal-set-login"
+          role="presentation"
+          onClick={() => {}}
+        >
+          로그인
+        </span>
+      </p>
     </Container>
   );
 };
