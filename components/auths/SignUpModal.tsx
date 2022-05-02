@@ -162,6 +162,27 @@ const SignUpModal: React.FC = () => {
     setBirthYear(event.target.value);
   };
 
+  //* 회원가입 폼 입력 값 확인하기
+  const validateSignUpForm = () => {
+    //* 인풋 값이 없다면
+    if (!email || !lastname || !firstname || !password) {
+      return false;
+    }
+    //* 비밀본호가 올바르지 않다면
+    if (
+      isPasswordHasNameOrEmail ||
+      !isPasswordOverMinLength ||
+      isPasswordHasNumberOrSymbol
+    ) {
+      return false;
+    }
+    //* 생년월일 셀렉터 값이 없다면
+    if (!birthDay || !birthMonth || !birthYear) {
+      return false;
+    }
+    return true;
+  };
+
   //* 화원가입 폼 보내기
   const onSubmitSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -169,21 +190,23 @@ const SignUpModal: React.FC = () => {
     if (!email || !lastname || !firstname || !password) {
       return undefined;
     }
-    try {
-      const signUpBody = {
-        email,
-        lastname,
-        firstname,
-        password,
-        birthday: new Date(
-          `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
-        ).toISOString(),
-      };
-      console.log(signUpBody);
-      const { data } = await signupAPI(signUpBody);
-      dispatch(userActions.setLoggedUser(data));
-    } catch (e) {
-      console.log(e);
+    if (validateSignUpForm()) {
+      try {
+        const signUpBody = {
+          email,
+          lastname,
+          firstname,
+          password,
+          birthday: new Date(
+            `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+          ).toISOString(),
+        };
+        console.log(signUpBody);
+        const { data } = await signupAPI(signUpBody);
+        dispatch(userActions.setLoggedUser(data));
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -274,6 +297,7 @@ const SignUpModal: React.FC = () => {
             defaultValue="월"
             value={birthMonth}
             onChange={onChangeBirthMonth}
+            isValid={!!birthMonth}
           />
         </div>
         <div className="sign-up-modal-birthday-day-selector">
@@ -283,6 +307,7 @@ const SignUpModal: React.FC = () => {
             defaultValue="일"
             value={birthDay}
             onChange={onChangeBirthDay}
+            isValid={!!birthDay}
           />
         </div>
         <div className="sign-up-modal-birthday-year-selector">
@@ -292,6 +317,7 @@ const SignUpModal: React.FC = () => {
             defaultValue="년"
             value={birthYear}
             onChange={onChangeBirthYear}
+            isValid={!!birthYear}
           />
         </div>
       </div>
