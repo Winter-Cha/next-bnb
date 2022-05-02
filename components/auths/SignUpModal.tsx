@@ -10,8 +10,13 @@ import Input from "../common/input";
 import { dayList, monthList, yearList } from "../../lib/staticData";
 import Selector from "../common/Selector";
 import Button from "../common/Button";
+import { signupAPI } from "../../lib/api/auth";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../store/user";
+import { commonActions } from "../../store/common";
+import useValidateMode from "../../hooks/useValidationMode";
 
-const Container = styled.div`
+const Container = styled.form`
   width: 568px;
   height: 614px;
   background-color: white;
@@ -78,6 +83,8 @@ const SignUpModal: React.FC = () => {
   const [birthYear, setBirthYear] = useState<string | undefined>();
   const [birthDay, setBirthDay] = useState<string | undefined>();
   const [birthMonth, setBirthMonth] = useState<string | undefined>();
+  const dispatch = useDispatch();
+  const { setValidateMode } = useValidateMode();
 
   //* 이메일 주소 변경 시
   const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,8 +126,33 @@ const SignUpModal: React.FC = () => {
     setBirthYear(event.target.value);
   };
 
+  //* 화원가입 폼 보내기
+  const onSubmitSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setValidateMode(true);
+    if (!email || !lastname || !firstname || !password) {
+      return undefined;
+    }
+    try {
+      const signUpBody = {
+        email,
+        lastname,
+        firstname,
+        password,
+        birthday: new Date(
+          `${birthYear}-${birthMonth!.replace("월", "")}-${birthDay}`
+        ).toISOString(),
+      };
+      console.log(signUpBody);
+      const { data } = await signupAPI(signUpBody);
+      dispatch(userActions.setLoggedUser(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <Container>
+    <Container onSubmit={onSubmitSignUp}>
       <CloseXICon className="modal-close-x-icon" />
       <div className="input-wrapper">
         <Input
@@ -130,6 +162,9 @@ const SignUpModal: React.FC = () => {
           value={email}
           onChange={onChangeEmail}
           icon={<MailIcon />}
+          useValidation
+          isValid={!!email}
+          errorMessage="이메일이 필요합니다."
         />
       </div>
       <div className="input-wrapper">
@@ -138,6 +173,9 @@ const SignUpModal: React.FC = () => {
           value={firstname}
           onChange={onChangeFirstname}
           icon={<PersonIcon />}
+          useValidation
+          isValid={!!firstname}
+          errorMessage="이름을 입력하세요."
         />
       </div>
       <div className="input-wrapper">
@@ -146,6 +184,9 @@ const SignUpModal: React.FC = () => {
           value={lastname}
           onChange={onChangeLastname}
           icon={<PersonIcon />}
+          useValidation
+          isValid={!!lastname}
+          errorMessage="성을 입력합니다."
         />
       </div>
       <div className="input-wrapper">
@@ -161,6 +202,9 @@ const SignUpModal: React.FC = () => {
               <OpenedEyeIcon onClick={toggleHidePassword} />
             )
           }
+          useValidation
+          isValid={!!password}
+          errorMessage="비밀번호를 입력하세요."
         />
       </div>
       <p className="sign-up-birthday-label">생일</p>
