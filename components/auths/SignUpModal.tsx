@@ -22,6 +22,7 @@ const Container = styled.form`
   height: 614px;
   background-color: white;
   z-index: 11;
+  padding: 20px;
 
   .modal-close-x-icon {
     cursor: pointer;

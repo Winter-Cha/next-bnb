@@ -58,7 +58,7 @@ const Container = styled.div<InputContainerProps>`
     `}
   .input-icon-wrapper {
     position: absolute;
-    top: 0;
+    top: 15px;
     right: 11px;
     height: 46px;
     display: flex;
