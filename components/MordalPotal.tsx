@@ -13,7 +13,7 @@ const Container = styled.div`
   left: 0;
   .modal-background {
     position: absolute;
-    widht: 100%;
+    width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.75);
     z-index: 10;
@@ -22,9 +22,10 @@ const Container = styled.div`
 
 interface IProps {
   children: React.ReactNode;
+  closePotal: () => void;
 }
 
-const ModalPortal: React.FC<IProps> = ({ children }) => {
+const ModalPortal: React.FC<IProps> = ({ children, closePotal }) => {
   const ref = useRef<Element | null>();
   const [mounted, setMounted] = useState(false);
 
@@ -39,7 +40,11 @@ const ModalPortal: React.FC<IProps> = ({ children }) => {
   if (ref.current && mounted) {
     return createPortal(
       <Container>
-        <div className="modal-background" />
+        <div
+          className="modal-background"
+          onClick={closePotal}
+          role="presentation"
+        />
         {children}
       </Container>,
       ref.current

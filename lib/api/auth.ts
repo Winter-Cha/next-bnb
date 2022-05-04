@@ -10,7 +10,15 @@ export interface SignUpAPIBody {
     birthday: string;
 };
 
+export interface LoginAPIBody {
+    email: string;
+    password: string;
+}
+
 //* 회원가입 api
 export const signupAPI = (body: SignUpAPIBody) =>
     axios.post<UserType>("/api/auth/signup", body);
 
+//* 로그인 api
+export const loginAPI = (body: LoginAPIBody) =>
+    axios.post<UserType>("/api/auth/login", body);

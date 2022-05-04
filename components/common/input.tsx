@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import palette from "../../styles/palette";
-import { useSelector } from "../../store/";
+import { useSelector } from "../../store";
 
 type InputContainerProps = {
   iconExist: boolean;

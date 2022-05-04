@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import CloseXICon from "../../public/static/svg/modal/modal_colose_x_icon.svg";
 import MailIcon from "../../public/static/svg/input/mail.svg";
 import PersonIcon from "../../public/static/svg/input/person.svg";
 import OpenedEyeIcon from "../../public/static/svg/input/opened-eye.svg";
@@ -16,29 +15,12 @@ import { userActions } from "../../store/user";
 import { commonActions } from "../../store/common";
 import useValidateMode from "../../hooks/useValidationMode";
 import PasswordWarning from "./PasswordWarning";
+import { authActions } from "../../store/auth";
 
-const Container = styled.form`
-  width: 568px;
-  height: 614px;
-  background-color: white;
-  z-index: 11;
-  padding: 20px;
-
-  .modal-close-x-icon {
-    cursor: pointer;
-    display: block;
-    margin: 0 0 40px auto;
-  }
-
+const Container = styled.div`
   .input-wrapper {
     position: relative;
     margin-bottom: 16px;
-  }
-
-  .sign-up-password-input-wrapper {
-    svg {
-      cursor: pointer;
-    }
   }
 
   .sign-up-birthday-label {
@@ -222,134 +204,143 @@ const SignUpModal: React.FC<IProps> = ({ closeModalPotal }) => {
     }
   };
 
+  //* 로그인 모달로 변경하기
+  const changeToLoginModal = () => {
+    dispatch(authActions.setAuthMode("login"));
+  };
+
   useEffect(() => {
     setValidateMode(false);
   }, []);
 
   return (
-    <Container onSubmit={onSubmitSignUp}>
-      <CloseXICon className="modal-close-x-icon" onClick={closeModalPotal} />
-      <div className="input-wrapper">
-        <Input
-          placeholder="이메일 주소"
-          type="email"
-          name="email"
-          value={email}
-          onChange={onChangeEmail}
-          icon={<MailIcon />}
-          useValidation
-          isValid={!!email}
-          errorMessage="이메일이 필요합니다."
-        />
-      </div>
-      <div className="input-wrapper">
-        <Input
-          placeholder="이름(예:길동)"
-          value={firstname}
-          onChange={onChangeFirstname}
-          icon={<PersonIcon />}
-          useValidation
-          isValid={!!firstname}
-          errorMessage="이름을 입력하세요."
-        />
-      </div>
-      <div className="input-wrapper">
-        <Input
-          placeholder="성(예: 홍)"
-          value={lastname}
-          onChange={onChangeLastname}
-          icon={<PersonIcon />}
-          useValidation
-          isValid={!!lastname}
-          errorMessage="성을 입력합니다."
-        />
-      </div>
-      <div className="input-wrapper">
-        <Input
-          placeholder="비밀번호 설정하기"
-          type={hidePassword ? "password" : "text"}
-          value={password}
-          onChange={onChangePassword}
-          onFocus={onFocusPassword}
-          icon={
-            hidePassword ? (
-              <ClosedEyeIcon onClick={toggleHidePassword} />
-            ) : (
-              <OpenedEyeIcon onClick={toggleHidePassword} />
-            )
-          }
-          useValidation
-          isValid={
-            !isPasswordHasNameOrEmail &&
-            isPasswordOverMinLength &&
-            !isPasswordHasNumberOrSymbol
-          }
-          errorMessage="비밀번호를 입력하세요."
-        />
-      </div>
-      {passwordFocused && (
-        <>
-          <PasswordWarning
-            isValid={isPasswordHasNameOrEmail}
-            text="비밀번호에 본인 이름이나 이메일 주소를 포함할 수 없습니다."
-          />
-          <PasswordWarning isValid={!isPasswordOverMinLength} text="최소 8자" />
-          <PasswordWarning
-            isValid={isPasswordHasNumberOrSymbol}
-            text="숫자나 기호를 포함하세요."
-          />
-        </>
-      )}
-      <p className="sign-up-birthday-label">생일</p>
-      <p className="sign-up-modal-birthday-info">
-        만 18세 이상의 성인만 회원으로 가입할 수 있습니다. 생일은 다른
-        에어비앤비 이용자에게 공개되지 않습니다.
-      </p>
-      <div className="sign-up-modal-birthday-selectors">
-        <div className="sign-up-modal-birthday-month-selector">
-          <Selector
-            options={monthList}
-            disabledOptions={["월"]}
-            defaultValue="월"
-            value={birthMonth}
-            onChange={onChangeBirthMonth}
-            isValid={!!birthMonth}
+    <Container>
+      <form onSubmit={onSubmitSignUp}>
+        <div className="input-wrapper">
+          <Input
+            placeholder="이메일 주소"
+            type="email"
+            name="email"
+            value={email}
+            onChange={onChangeEmail}
+            icon={<MailIcon />}
+            useValidation
+            isValid={!!email}
+            errorMessage="이메일이 필요합니다."
           />
         </div>
-        <div className="sign-up-modal-birthday-day-selector">
-          <Selector
-            options={dayList}
-            disabledOptions={["일"]}
-            defaultValue="일"
-            value={birthDay}
-            onChange={onChangeBirthDay}
-            isValid={!!birthDay}
+        <div className="input-wrapper">
+          <Input
+            placeholder="이름(예:길동)"
+            value={firstname}
+            onChange={onChangeFirstname}
+            icon={<PersonIcon />}
+            useValidation
+            isValid={!!firstname}
+            errorMessage="이름을 입력하세요."
           />
         </div>
-        <div className="sign-up-modal-birthday-year-selector">
-          <Selector
-            options={yearList}
-            disabledOptions={["년"]}
-            defaultValue="년"
-            value={birthYear}
-            onChange={onChangeBirthYear}
-            isValid={!!birthYear}
+        <div className="input-wrapper">
+          <Input
+            placeholder="성(예: 홍)"
+            value={lastname}
+            onChange={onChangeLastname}
+            icon={<PersonIcon />}
+            useValidation
+            isValid={!!lastname}
+            errorMessage="성을 입력합니다."
           />
         </div>
-      </div>
-      <div className="sign-up-modal-submit-button-wrapper">
-        <Button type="submit">가입하기</Button>
-      </div>
-      <p>
-        이미 에어비앤비 계정이 있나요?
-        <span
-          className="sign-up-modal-set-login"
-          role="presentation"
-          onClick={() => {}}
-        >
-          로그인
-        </span>
-      </p>
+        <div className="input-wrapper">
+          <Input
+            placeholder="비밀번호 설정하기"
+            type={hidePassword ? "password" : "text"}
+            value={password}
+            onChange={onChangePassword}
+            onFocus={onFocusPassword}
+            icon={
+              hidePassword ? (
+                <ClosedEyeIcon onClick={toggleHidePassword} />
+              ) : (
+                <OpenedEyeIcon onClick={toggleHidePassword} />
+              )
+            }
+            useValidation
+            isValid={
+              !isPasswordHasNameOrEmail &&
+              isPasswordOverMinLength &&
+              !isPasswordHasNumberOrSymbol
+            }
+            errorMessage="비밀번호를 입력하세요."
+          />
+        </div>
+        {passwordFocused && (
+          <>
+            <PasswordWarning
+              isValid={isPasswordHasNameOrEmail}
+              text="비밀번호에 본인 이름이나 이메일 주소를 포함할 수 없습니다."
+            />
+            <PasswordWarning
+              isValid={!isPasswordOverMinLength}
+              text="최소 8자"
+            />
+            <PasswordWarning
+              isValid={isPasswordHasNumberOrSymbol}
+              text="숫자나 기호를 포함하세요."
+            />
+          </>
+        )}
+        <p className="sign-up-birthday-label">생일</p>
+        <p className="sign-up-modal-birthday-info">
+          만 18세 이상의 성인만 회원으로 가입할 수 있습니다. 생일은 다른
+          에어비앤비 이용자에게 공개되지 않습니다.
+        </p>
+        <div className="sign-up-modal-birthday-selectors">
+          <div className="sign-up-modal-birthday-month-selector">
+            <Selector
+              options={monthList}
+              disabledOptions={["월"]}
+              defaultValue="월"
+              value={birthMonth}
+              onChange={onChangeBirthMonth}
+              isValid={!!birthMonth}
+            />
+          </div>
+          <div className="sign-up-modal-birthday-day-selector">
+            <Selector
+              options={dayList}
+              disabledOptions={["일"]}
+              defaultValue="일"
+              value={birthDay}
+              onChange={onChangeBirthDay}
+              isValid={!!birthDay}
+            />
+          </div>
+          <div className="sign-up-modal-birthday-year-selector">
+            <Selector
+              options={yearList}
+              disabledOptions={["년"]}
+              defaultValue="년"
+              value={birthYear}
+              onChange={onChangeBirthYear}
+              isValid={!!birthYear}
+            />
+          </div>
+        </div>
+        <div className="sign-up-modal-submit-button-wrapper">
+          <Button type="submit">가입하기</Button>
+        </div>
+        <p>
+          이미 에어비앤비 계정이 있나요?
+          <span
+            className="sign-up-modal-set-login"
+            role="presentation"
+            onClick={changeToLoginModal}
+          >
+            로그인
+          </span>
+        </p>
+      </form>
     </Container>
   );
 };
