@@ -14,8 +14,6 @@ export default class MyDocument extends Document {
         });
 
       const initialProps = await Document.getInitialProps(ctx);
-      return initialProps;
-      /*
       return {
         ...initialProps,
         styles: (
@@ -25,7 +23,6 @@ export default class MyDocument extends Document {
           </>
         ),
       };
-      */
     } finally {
       sheet.seal();
     }

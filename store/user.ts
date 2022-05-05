@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserType } from "../types/user";
 import { UserState } from "../types/reduxState";
+import { UserType } from "../types/user";
 
 //* 초기 상태
 const initialState: UserState = {
