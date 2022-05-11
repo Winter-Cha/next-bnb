@@ -16,6 +16,7 @@ const globalStyle = css`
 
   a {
     text-decoration: none;
+    color: ${palette.black};
   }
 
   @font-face {
