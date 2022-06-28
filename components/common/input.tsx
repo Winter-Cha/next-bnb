@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import palette from "../../styles/palette";
 import { useSelector } from "../../store";
+import React from "react";
 
 type InputContainerProps = {
   iconExist: boolean;
@@ -97,4 +98,4 @@ const Input: React.FC<IProps> = ({
   );
 };
 
-export default Input;
+export default React.memo(Input);

@@ -5,7 +5,7 @@ import PersonIcon from "../../public/static/svg/input/person.svg";
 import OpenedEyeIcon from "../../public/static/svg/input/opened-eye.svg";
 import ClosedEyeIcon from "../../public/static/svg/input/closed_eye.svg";
 import palette from "../../styles/palette";
-import Input from "../common/input";
+import Input from "../common/Input";
 import { dayList, monthList, yearList } from "../../lib/staticData";
 import Selector from "../common/Selector";
 import Button from "../common/Button";

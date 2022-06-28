@@ -4,7 +4,7 @@ import OpenedEyeIcon from "../../public/static/svg/input/opened-eye.svg";
 import CloseEyeIcon from "../../public/static/svg/input/closed_eye.svg";
 import palette from "../../styles/palette";
 import Button from "../common/Button";
-import Input from "../common/input";
+import Input from "../common/Input";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
