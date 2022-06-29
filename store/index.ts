@@ -4,15 +4,17 @@ import {
   TypedUseSelectorHook,
   useSelector as useReduxSelector,
 } from "react-redux";
+import { Store } from "redux";
 import common from "./common";
 import user from "./user";
 import auth from "./auth";
-import { Store } from "redux";
+import registerRoom from "./registerRoom";
 
 const rootReducer = combineReducers({
   common: common.reducer,
   user: user.reducer,
   auth: auth.reducer,
+  registerRoom: registerRoom.reducer,
 });
 
 //* 스토어의 타입
