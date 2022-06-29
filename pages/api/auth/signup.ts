@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Data from "../../../lib/data";
 import bcrypt from "bcryptjs";
 import { StoredUserType } from "../../../types/user";
-import user from "../../../lib/data/user";
 import jwt from "jsonwebtoken";
 import { SignUpAPIBody } from "../../../lib/api/auth";
 

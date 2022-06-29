@@ -63,7 +63,12 @@ const Container = styled.div`
     cursor: pointer;
   }
 `;
-
+//* 선택할 수 없는 월 option
+const disabledMonths = ["월"];
+//* 선택할 수 없는 알 option
+const disabledDays = ["일"];
+//* 선택할 수 없는 년 option
+const disabledYears = ["년"];
 //* 비밀번호 최소 자릿수
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -299,7 +304,7 @@ const SignUpModal: React.FC<IProps> = ({ closeModalPotal }) => {
           <div className="sign-up-modal-birthday-month-selector">
             <Selector
               options={monthList}
-              disabledOptions={["월"]}
+              disabledOptions={disabledMonths}
               defaultValue="월"
               value={birthMonth}
               onChange={onChangeBirthMonth}
@@ -309,7 +314,7 @@ const SignUpModal: React.FC<IProps> = ({ closeModalPotal }) => {
           <div className="sign-up-modal-birthday-day-selector">
             <Selector
               options={dayList}
-              disabledOptions={["일"]}
+              disabledOptions={disabledDays}
               defaultValue="일"
               value={birthDay}
               onChange={onChangeBirthDay}
@@ -319,7 +324,7 @@ const SignUpModal: React.FC<IProps> = ({ closeModalPotal }) => {
           <div className="sign-up-modal-birthday-year-selector">
             <Selector
               options={yearList}
-              disabledOptions={["년"]}
+              disabledOptions={disabledYears}
               defaultValue="년"
               value={birthYear}
               onChange={onChangeBirthYear}
